@@ -1,0 +1,15 @@
+[supervisord]
+nodaemon=true
+logfile=/var/log/supervisord.log
+
+[program:sshtunnel]
+command=/usr/bin/autossh -M 0 -o "ServerAliveInterval=60" -o "ServerAliveCountMax=3" -o StrictHostKeyChecking=no -i /root/.ssh/id_rsa -D 0.0.0.0:${SOCKS_PORT} -q -C -N ${SSH_USER}@${SSH_HOST} -p ${SSH_PORT}
+autorestart=true
+stderr_logfile=/var/log/sshtunnel.err.log
+stdout_logfile=/var/log/sshtunnel.out.log
+
+[program:privoxy]
+command=/usr/sbin/privoxy --no-daemon /etc/privoxy/config
+autorestart=true
+stderr_logfile=/var/log/privoxy.err.log
+stdout_logfile=/var/log/privoxy.out.log

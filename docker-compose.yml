@@ -1,0 +1,19 @@
+services:
+  http-ssh-proxy:
+    build: .
+    ports:
+      - "8888:8888"
+    volumes:
+      - ~/.ssh/id_rsa:/root/.ssh/id_rsa:ro
+    environment:
+      - SSH_USER=root
+      - SSH_HOST=1.1.1.1
+      - SSH_PORT=22
+      - SOCKS_PORT=1080
+      - HTTP_PORT=8888
+    restart: always
+    healthcheck:
+      test: curl -x http://localhost:8888 http://ident.me || exit 1
+      interval: 30s
+      timeout: 5s
+      retries: 3
